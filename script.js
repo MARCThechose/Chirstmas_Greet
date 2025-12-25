@@ -227,45 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        // Populate Inter-participant Christmas Greetings
-        const greetingSenderSelect = document.getElementById('greeting-sender-select');
-        const interParticipantGreetingsContainer = document.getElementById('inter-participant-greetings-container');
-
-        if (greetingSenderSelect && interParticipantGreetingsContainer && advancedAnalysisData.inter_participant_christmas_greetings) {
-            greetingSenderSelect.innerHTML = '<option value="">-- Select a Sender --</option>'; // Default option
-            const participantsForSelect = Object.keys(advancedAnalysisData.inter_participant_christmas_greetings);
-            participantsForSelect.forEach(senderName => {
-                const option = document.createElement('option');
-                option.value = senderName;
-                option.textContent = senderName;
-                greetingSenderSelect.appendChild(option);
-            });
-
-            // Event listener for sender selection
-            greetingSenderSelect.addEventListener('change', (event) => {
-                const selectedSender = event.target.value;
-                interParticipantGreetingsContainer.innerHTML = ''; // Clear previous greetings
-
-                if (selectedSender && advancedAnalysisData.inter_participant_christmas_greetings[selectedSender]) {
-                    const greetingsFromSender = advancedAnalysisData.inter_participant_christmas_greetings[selectedSender];
-                    // Filter out self-greeting from the list
-                    const otherParticipants = Object.keys(greetingsFromSender).filter(receiverName => receiverName !== selectedSender);
-                    
-                    otherParticipants.forEach(receiverName => {
-                        const greetingData = greetingsFromSender[receiverName];
-                        const div = document.createElement('div');
-                        div.classList.add('inter-greeting-item');
-                        div.innerHTML = `
-                            <h3>To: ${receiverName}</h3>
-                            <p><strong>Greeting:</strong> ${greetingData.greeting}</p>
-                            <p><strong>Blessing:</strong> ${greetingData.blessing}</p>
-                            <p><strong>Gift:</strong> ${greetingData.gift}</p>
-                        `;
-                        interParticipantGreetingsContainer.appendChild(div);
-                    });
-                }
-            });
-        }
     }
 
 
@@ -298,6 +259,27 @@ document.addEventListener('DOMContentLoaded', () => {
             showSlide(currentSlide);
         }
     });
+
+    const greetingsBtn = document.getElementById('greetings-btn');
+    if (greetingsBtn) {
+        const links = [
+            'https://youtube.com/shorts/sA16WrAe_30',
+            'https://youtube.com/shorts/Q9xc5Odzgsw?feature=share',
+            'https://youtube.com/shorts/8gZpRjHa1uw?feature=share',
+            'https://youtube.com/shorts/TuqEvUT6WrQ?feature=share',
+            'https://youtube.com/shorts/PNV1r7eYAq0'
+        ];
+
+        greetingsBtn.addEventListener('click', () => {
+            console.log('Greetings button clicked!');
+            const randomIndex = Math.floor(Math.random() * links.length);
+            const randomLink = links[randomIndex];
+            console.log('Redirecting to:', randomLink);
+            window.location.href = randomLink;
+        });
+    } else {
+        console.error('Greetings button not found!');
+    }
 
     // Initial load
     fetchData();
