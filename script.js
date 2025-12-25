@@ -259,25 +259,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const greetingsBtn = document.getElementById('greetings-btn');
-    if (greetingsBtn) {
-        const links = [
-            'https://youtube.com/shorts/sA16WrAe_30',
-            'https://youtube.com/shorts/Q9xc5Odzgsw?feature=share',
-            'https://youtube.com/shorts/8gZpRjHa1uw?feature=share',
-            'https://youtube.com/shorts/TuqEvUT6WrQ?feature=share',
-            'https://youtube.com/shorts/PNV1r7eYAq0'
-        ];
-
-        greetingsBtn.addEventListener('click', () => {
-            console.log('Greetings button clicked!');
-            const randomIndex = Math.floor(Math.random() * links.length);
-            const randomLink = links[randomIndex];
-            console.log('Redirecting to:', randomLink);
-            window.location.href = randomLink;
-        });
+    const randomGreetingsBtn = document.getElementById('random-greeting-btn');
+    if (randomGreetingsBtn) {
+        let links = [];
+        fetch('link.txt')
+            .then(response => response.text())
+            .then(text => {
+                links = text.split('\n').filter(link => link.trim() !== '');
+                randomGreetingsBtn.addEventListener('click', () => {
+                    console.log('Random Greetings button clicked!');
+                    if (links.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * links.length);
+                        const randomLink = links[randomIndex];
+                        console.log('Redirecting to:', randomLink);
+                        window.location.href = randomLink;
+                    } else {
+                        console.error('No links found in link.txt');
+                        alert('Sorry, no greetings available at the moment.');
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching links:', error);
+                alert('Could not load the greetings. Please try again later.');
+            });
     } else {
-        console.error('Greetings button not found!');
+        console.error('Random Greetings button not found!');
     }
 
     // Initial load
